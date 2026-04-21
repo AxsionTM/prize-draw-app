@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Upload from "./components/Upload";
 
 function App() {
   const [participants, setParticipants] = useState([]);
   const [winner, setWinner] = useState(null);
-  const [history, setHistory] = useState([]);
+
+  const [history, setHistory] = useState(() => {
+    const saved = localStorage.getItem("history");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("history", JSON.stringify(history));
+  }, [history]);
 
   function pickWinner() {
     if (participants.length === 0) {
