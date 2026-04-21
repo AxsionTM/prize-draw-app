@@ -14,7 +14,12 @@ function App() {
     const randomIndex = Math.floor(Math.random() * participants.length);
     const selected = participants[randomIndex];
 
-    setWinner(selected);
+    const now = new Date().toLocaleString();
+
+    setWinner({
+      name: selected.name,
+      date: now,
+    });
   }
 
   return (
@@ -35,7 +40,10 @@ function App() {
       <button onClick={pickWinner}>Выбрать победителя</button>
 
       {winner && (
-        <h2>Победитель: {winner.name}</h2>
+        <div>
+          <h2>Победитель: {winner.name}</h2>
+          <p>Дата: {winner.date}</p>
+        </div>
       )}
     </div>
   );
