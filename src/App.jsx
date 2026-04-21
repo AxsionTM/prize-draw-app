@@ -1,30 +1,34 @@
-import { useState } from "react";
+// Сам маин проекта импорты итд и вывод веб сайта
+
+import { useState, useEffect } from "react";
 import Upload from "./components/Upload";
 import Roulette from "./components/Roulette";
 
 function App() {
-  const [participants, setParticipants] = useState(
-    JSON.parse(localStorage.getItem("participants")) || []
-  );
+  const [participants, setParticipants] = useState(() => {
+    const saved = localStorage.getItem("participants");
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  const [history, setHistory] = useState(
-    JSON.parse(localStorage.getItem("history")) || []
-  );
+  const [history, setHistory] = useState(() => {
+    const saved = localStorage.getItem("history");
+    return saved ? JSON.parse(saved) : [];
+  });
 
+// Так, этот код выполняет роль такую как загрузку участников, историю, случайного победителя, сохранение результата итд
   const [winner, setWinner] = useState(null);
 
-  function handleParticipants(data) {
-    setParticipants(data);
-    localStorage.setItem("participants", JSON.stringify(data));
-  }
+  useEffect(() => {
+    localStorage.setItem("participants", JSON.stringify(participants));
+  }, [participants]);
+
+  useEffect(() => {
+    localStorage.setItem("history", JSON.stringify(history));
+  }, [history]);
 
   function handleWinner(result) {
     setWinner(result);
-
-    const newHistory = [...history, result];
-    setHistory(newHistory);
-
-    localStorage.setItem("history", JSON.stringify(newHistory));
+    setHistory([...history, result]);
   }
 
   function clearParticipants() {
@@ -37,11 +41,10 @@ function App() {
     localStorage.removeItem("history");
   }
 
-// ТАК ЭТОТ КОД, ЭТО КНОПКА УСТАНОВКИ ИСТОРИИ В ФОРМАТЕ JSON.
-  function downloadLog() {
-    const json = JSON.stringify(history, null, 2);
+  function downloadHistory() {
+    const dataStr = JSON.stringify(history, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
 
-    const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
@@ -51,24 +54,29 @@ function App() {
 
     URL.revokeObjectURL(url);
   }
-  
+
 // ВСЁ ПРОСТО ЕСЛИ С КОДОМ ВСЁ ВПОРЯДКЕ И РАБОТАЕТ, ТОГДА САМ ДИЗАЙН ВЫДАЁТ САЙТА
   return (
     <div style={{ maxWidth: 600, margin: "auto", textAlign: "center" }}>
       <h1>🎉 Розыгрыш призов</h1>
 
-      <Upload setParticipants={handleParticipants} />
+      <Upload setParticipants={setParticipants} />
 
       <h3>Участники:</h3>
       <ul>
-        {participants.map((p) => (
-          <li key={p.id}>{p.name}</li>
+        {participants.map((p, i) => (
+          <li key={i}>{p.name}</li>
         ))}
       </ul>
 
-      <button onClick={clearParticipants}>Очистить участников</button>
+      <button onClick={clearParticipants}>
+        Очистить участников
+      </button>
 
-      <Roulette participants={participants} onPickWinner={handleWinner} />
+      <Roulette
+        participants={participants}
+        onPickWinner={handleWinner}
+      />
 
       {winner && (
         <div>
@@ -86,9 +94,15 @@ function App() {
         ))}
       </ul>
 
-      <button onClick={clearHistory}>Очистить историю</button>
+      <button onClick={clearHistory}>
+        Очистить историю
+      </button>
 
-      <button onClick={downloadLog}>Скачать лог (JSON)</button>
+      <br /><br />
+
+      <button onClick={downloadHistory}>
+        📥 Скачать историю (JSON)
+      </button>
     </div>
   );
 }

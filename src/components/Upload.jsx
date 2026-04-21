@@ -1,3 +1,5 @@
+// Так, этот код выполняет роль такую как загрузку списков учатсников форматов JSON И CSV
+
 function Upload({ setParticipants }) {
   function handleFile(e) {
     const file = e.target.files[0];
@@ -24,7 +26,7 @@ function Upload({ setParticipants }) {
           alert("Ошибка JSON");
         }
       }
-      
+
 // ЭТОТ КОД ДЛЯ ИМПОРТА CSV ФАЙЛОВ
       else if (file.name.endsWith(".csv")) {
         try {

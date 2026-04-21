@@ -1,39 +1,39 @@
 import { useState } from "react";
 
 function Roulette({ participants, onPickWinner }) {
-  const [current, setCurrent] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [isSpinning, setIsSpinning] = useState(false);
 
-  function start() {
+  function spin() {
     if (participants.length === 0) {
       alert("Нет участников");
       return;
     }
 
-    if (isSpinning) return;
-
     setIsSpinning(true);
 
-    let counter = 0;
+    let count = 0;
 
     const interval = setInterval(() => {
       const randomIndex = Math.floor(Math.random() * participants.length);
-      setCurrent(participants[randomIndex].name);
+      setDisplayName(participants[randomIndex].name);
 
-      counter++;
+      count++;
 
-      if (counter > 20) {
+      if (count > 20) {
         clearInterval(interval);
 
-        const winnerIndex = Math.floor(Math.random() * participants.length);
-        const winner = participants[winnerIndex];
+        const finalIndex = Math.floor(Math.random() * participants.length);
+        const winner = participants[finalIndex];
 
-        setCurrent(winner.name);
+        setDisplayName(winner.name);
 
-        onPickWinner({
+        const result = {
           name: winner.name,
           date: new Date().toLocaleString(),
-        });
+        };
+
+        onPickWinner(result);
 
         setIsSpinning(false);
       }
@@ -41,19 +41,12 @@ function Roulette({ participants, onPickWinner }) {
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>
-      <div
-        style={{
-          fontSize: "30px",
-          fontWeight: "bold",
-          height: "50px",
-          marginBottom: "10px",
-        }}
-      >
-        {current || "Нажми старт"}
-      </div>
+    <div style={{ marginTop: 20 }}>
+      <h2>{displayName || "Нажми крутить"}</h2>
 
-      <button onClick={start}>🎯 Крутить рулетку</button>
+      <button onClick={spin} disabled={isSpinning}>
+        🎯 Крутить рулетку
+      </button>
     </div>
   );
 }
