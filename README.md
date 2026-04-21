@@ -145,3 +145,12 @@ prize-draw-app/
 ## 📅 Версия
 
 v1.0
+
+
+## 🎥 Демонстрация
+
+Короткое видео с работой приложения:
+
+[![Смотреть видео](https://img.youtube.com/vi/4SPG0isxo88/0.jpg)](https://youtu.be/4SPG0isxo88)
+
+
