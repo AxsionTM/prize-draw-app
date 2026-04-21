@@ -1,35 +1,47 @@
 function Upload({ setParticipants }) {
-  function handleFile(event) {
-    const file = event.target.files[0];
-
-    if (!file) {
-      alert("Файл не выбран");
-      return;
-    }
+  function handleFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
 
     const reader = new FileReader();
 
-    reader.onload = function (e) {
-      const text = e.target.result;
+    reader.onload = function (event) {
+      const text = event.target.result;
 
-      try {
-        const data = JSON.parse(text);
+      if (file.name.endsWith(".json")) {
+        try {
+          const data = JSON.parse(text);
+          setParticipants(data);
+        } catch {
+          alert("Ошибка JSON");
+        }
+      }
 
-        setParticipants(data);
-      } catch (error) {
-        alert("Ошибка: неправильный JSON файл");
+      else if (file.name.endsWith(".csv")) {
+        try {
+          const lines = text.split("\n");
+
+          const result = lines.slice(1).map((line) => ({
+            name: line.trim(),
+          }));
+
+          const clean = result.filter((item) => item.name !== "");
+
+          setParticipants(clean);
+        } catch {
+          alert("Ошибка CSV");
+        }
+      }
+
+      else {
+        alert("Поддерживаются только JSON и CSV");
       }
     };
 
     reader.readAsText(file);
   }
 
-  return (
-    <div>
-      <h2>Загрузка участников</h2>
-      <input type="file" onChange={handleFile} />
-    </div>
-  );
+  return <input type="file" onChange={handleFile} />;
 }
 
 export default Upload;
