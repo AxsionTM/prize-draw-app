@@ -2,13 +2,21 @@ import { useState, useEffect } from "react";
 import Upload from "./components/Upload";
 
 function App() {
-  const [participants, setParticipants] = useState([]);
+  const [participants, setParticipants] = useState(() => {
+    const saved = localStorage.getItem("participants");
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const [winner, setWinner] = useState(null);
 
   const [history, setHistory] = useState(() => {
     const saved = localStorage.getItem("history");
     return saved ? JSON.parse(saved) : [];
   });
+
+  useEffect(() => {
+    localStorage.setItem("participants", JSON.stringify(participants));
+  }, [participants]);
 
   useEffect(() => {
     localStorage.setItem("history", JSON.stringify(history));
@@ -39,6 +47,11 @@ function App() {
     localStorage.removeItem("history");
   }
 
+  function clearParticipants() {
+    setParticipants([]);
+    localStorage.removeItem("participants");
+  }
+
   return (
     <div>
       <h1>🎉 Розыгрыш призов</h1>
@@ -46,6 +59,9 @@ function App() {
       <Upload setParticipants={setParticipants} />
 
       <h2>Список участников:</h2>
+
+      <button onClick={clearParticipants}>Очистить участников</button>
+
       <ul>
         {participants.map((item, index) => (
           <li key={index}>{item.name}</li>
