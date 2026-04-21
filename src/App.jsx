@@ -31,8 +31,12 @@ function App() {
     };
 
     setWinner(result);
-
     setHistory([...history, result]);
+  }
+
+  function clearHistory() {
+    setHistory([]);
+    localStorage.removeItem("history");
   }
 
   return (
@@ -60,6 +64,9 @@ function App() {
       )}
 
       <h2>История розыгрышей:</h2>
+
+      <button onClick={clearHistory}>Очистить историю</button>
+
       <ul>
         {history.map((item, index) => (
           <li key={index}>
