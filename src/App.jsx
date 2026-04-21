@@ -4,6 +4,7 @@ import Upload from "./components/Upload";
 function App() {
   const [participants, setParticipants] = useState([]);
   const [winner, setWinner] = useState(null);
+  const [history, setHistory] = useState([]);
 
   function pickWinner() {
     if (participants.length === 0) {
@@ -16,10 +17,14 @@ function App() {
 
     const now = new Date().toLocaleString();
 
-    setWinner({
+    const result = {
       name: selected.name,
       date: now,
-    });
+    };
+
+    setWinner(result);
+
+    setHistory([...history, result]);
   }
 
   return (
@@ -45,6 +50,15 @@ function App() {
           <p>Дата: {winner.date}</p>
         </div>
       )}
+
+      <h2>История розыгрышей:</h2>
+      <ul>
+        {history.map((item, index) => (
+          <li key={index}>
+            {item.name} — {item.date}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
