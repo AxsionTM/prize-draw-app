@@ -1,8 +1,4 @@
-import { useState } from "react";
-
-function Upload() {
-  const [participants, setParticipants] = useState([]);
-
+function Upload({ setParticipants }) {
   function handleFile(event) {
     const file = event.target.files[0];
 
@@ -18,6 +14,7 @@ function Upload() {
 
       try {
         const data = JSON.parse(text);
+
         setParticipants(data);
       } catch (error) {
         alert("Ошибка: неправильный JSON файл");
@@ -30,16 +27,7 @@ function Upload() {
   return (
     <div>
       <h2>Загрузка участников</h2>
-
       <input type="file" onChange={handleFile} />
-
-      <h3>Список участников:</h3>
-
-      <ul>
-        {participants.map(function (item, index) {
-          return <li key={index}>{item.name}</li>;
-        })}
-      </ul>
     </div>
   );
 }
