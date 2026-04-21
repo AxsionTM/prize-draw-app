@@ -13,6 +13,11 @@ function App() {
 
   const [winner, setWinner] = useState(null);
 
+  function handleParticipants(data) {
+    setParticipants(data);
+    localStorage.setItem("participants", JSON.stringify(data));
+  }
+
   function handleWinner(result) {
     setWinner(result);
 
@@ -20,12 +25,6 @@ function App() {
     setHistory(newHistory);
 
     localStorage.setItem("history", JSON.stringify(newHistory));
-  }
-
-  function handleParticipants(data) {
-    setParticipants(data);
-
-    localStorage.setItem("participants", JSON.stringify(data));
   }
 
   function clearParticipants() {
@@ -38,6 +37,22 @@ function App() {
     localStorage.removeItem("history");
   }
 
+// ТАК ЭТОТ КОД, ЭТО КНОПКА УСТАНОВКИ ИСТОРИИ В ФОРМАТЕ JSON.
+  function downloadLog() {
+    const json = JSON.stringify(history, null, 2);
+
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "history.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
+  
+// ВСЁ ПРОСТО ЕСЛИ С КОДОМ ВСЁ ВПОРЯДКЕ И РАБОТАЕТ, ТОГДА САМ ДИЗАЙН ВЫДАЁТ САЙТА
   return (
     <div style={{ maxWidth: 600, margin: "auto", textAlign: "center" }}>
       <h1>🎉 Розыгрыш призов</h1>
@@ -46,8 +61,8 @@ function App() {
 
       <h3>Участники:</h3>
       <ul>
-        {participants.map((p, i) => (
-          <li key={i}>{p.name}</li>
+        {participants.map((p) => (
+          <li key={p.id}>{p.name}</li>
         ))}
       </ul>
 
@@ -72,6 +87,8 @@ function App() {
       </ul>
 
       <button onClick={clearHistory}>Очистить историю</button>
+
+      <button onClick={downloadLog}>Скачать лог (JSON)</button>
     </div>
   );
 }

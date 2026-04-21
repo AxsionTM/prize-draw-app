@@ -8,21 +8,32 @@ function Upload({ setParticipants }) {
     reader.onload = function (event) {
       const text = event.target.result;
 
+// ЭТОТ КОД ДЛЯ ИМПОРТА JSON ФАЙЛОВ
       if (file.name.endsWith(".json")) {
         try {
           const data = JSON.parse(text);
-          setParticipants(data);
+
+          const fixed = data.map((item, index) => ({
+            id: index + 1,
+            name: item.name || item,
+            contact: item.contact || "-"
+          }));
+
+          setParticipants(fixed);
         } catch {
           alert("Ошибка JSON");
         }
       }
-
+      
+// ЭТОТ КОД ДЛЯ ИМПОРТА CSV ФАЙЛОВ
       else if (file.name.endsWith(".csv")) {
         try {
           const lines = text.split("\n");
 
-          const result = lines.slice(1).map((line) => ({
+          const result = lines.slice(1).map((line, index) => ({
+            id: index + 1,
             name: line.trim(),
+            contact: "-"
           }));
 
           const clean = result.filter((item) => item.name !== "");
