@@ -1,16 +1,147 @@
-# React + Vite
+# 🎉 Розыгрыш призов (Random Picker)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Простое веб-приложение для случайного выбора победителя из списка участников.
+Проект реализован с использованием React + Vite.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Возможности
 
-## React Compiler
+* 📂 Загрузка участников из файла (JSON / CSV)
+* 🎯 Случайный выбор победителя
+* 🎡 Анимация рулетки
+* 📜 История розыгрышей
+* 💾 Сохранение данных (localStorage)
+* 📥 Экспорт истории в JSON
+* 🧹 Очистка участников и истории
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 📁 Форматы файлов
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### JSON
+
+```json
+[
+  { "name": "Алексей" },
+  { "name": "Мария" }
+]
+```
+
+### CSV
+
+```csv
+name
+Алексей
+Мария
+Игорь
+```
+
+---
+
+## ⚙️ Установка и запуск
+
+1. Установить зависимости:
+
+```bash
+npm install
+```
+
+2. Запустить проект:
+
+```bash
+npm run dev
+```
+
+3. Открыть в браузере:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🧠 Как пользоваться
+
+1. Загрузить файл с участниками
+2. Нажать кнопку "Крутить рулетку"
+3. Получить победителя
+4. Смотреть историю ниже
+5. При необходимости скачать историю или удалить
+
+---
+
+## 📦 Структура проекта
+
+```
+prize-draw-app/
+ ├── data/
+ │    ├── participants.json
+ │    ├── participants.csv
+ │
+ ├── src/
+ │    ├── components/
+ │    │    ├── Upload.jsx
+ │    │    ├── Roulette.jsx
+ │
+ │    ├── utils/
+ │    │    ├── loader.js
+ │    │    ├── draw.js
+ │    │    ├── logger.js
+ │
+ │    ├── App.jsx
+ │    ├── main.jsx
+ │    ├── index.css
+ │
+ ├── public/
+ ├── index.html
+ ├── package.json
+ ├── vite.config.js
+ ├── README.md
+```
+
+
+---
+
+## 💾 Хранение данных
+
+Приложение использует localStorage для сохранения:
+
+* участников
+* истории розыгрышей
+
+---
+
+## ⚠️ Обработка ошибок
+
+* Проверка формата файла
+* Проверка пустого списка участников
+* Сообщения об ошибках (alert)
+
+---
+
+## 📌 Ограничения
+
+* Один и тот же участник может выиграть несколько раз
+* Данные хранятся только в браузере
+
+---
+
+<p align="center">
+  <img src="https://avatars.githubusercontent.com/u/146373364?v=4" width="120" style="border-radius:50%">
+</p>
+
+<h2 align="center">👨‍💻 Maxsim (Axsion)</h2>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Age-17-blue?style=for-the-badge">
+  <a href="https://github.com/AxsionTM">
+    <img src="https://img.shields.io/badge/GitHub-Axsion-black?style=for-the-badge&logo=github">
+  </a>
+</p>
+
+---
+
+## 📅 Версия
+
+v1.0
