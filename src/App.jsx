@@ -1,50 +1,31 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Upload from "./components/Upload";
+import Roulette from "./components/Roulette";
 
 function App() {
-  const [participants, setParticipants] = useState(() => {
-    const saved = localStorage.getItem("participants");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [participants, setParticipants] = useState(
+    JSON.parse(localStorage.getItem("participants")) || []
+  );
+
+  const [history, setHistory] = useState(
+    JSON.parse(localStorage.getItem("history")) || []
+  );
 
   const [winner, setWinner] = useState(null);
 
-  const [history, setHistory] = useState(() => {
-    const saved = localStorage.getItem("history");
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  useEffect(() => {
-    localStorage.setItem("participants", JSON.stringify(participants));
-  }, [participants]);
-
-  useEffect(() => {
-    localStorage.setItem("history", JSON.stringify(history));
-  }, [history]);
-
-  function pickWinner() {
-    if (participants.length === 0) {
-      alert("Сначала загрузите участников");
-      return;
-    }
-
-    const randomIndex = Math.floor(Math.random() * participants.length);
-    const selected = participants[randomIndex];
-
-    const now = new Date().toLocaleString();
-
-    const result = {
-      name: selected.name,
-      date: now,
-    };
-
+  function handleWinner(result) {
     setWinner(result);
-    setHistory([...history, result]);
+
+    const newHistory = [...history, result];
+    setHistory(newHistory);
+
+    localStorage.setItem("history", JSON.stringify(newHistory));
   }
 
-  function clearHistory() {
-    setHistory([]);
-    localStorage.removeItem("history");
+  function handleParticipants(data) {
+    setParticipants(data);
+
+    localStorage.setItem("participants", JSON.stringify(data));
   }
 
   function clearParticipants() {
@@ -52,44 +33,45 @@ function App() {
     localStorage.removeItem("participants");
   }
 
+  function clearHistory() {
+    setHistory([]);
+    localStorage.removeItem("history");
+  }
+
   return (
-    <div>
+    <div style={{ maxWidth: 600, margin: "auto", textAlign: "center" }}>
       <h1>🎉 Розыгрыш призов</h1>
 
-      <Upload setParticipants={setParticipants} />
+      <Upload setParticipants={handleParticipants} />
 
-      <h2>Список участников:</h2>
-
-      <button onClick={clearParticipants}>Очистить участников</button>
-
+      <h3>Участники:</h3>
       <ul>
-        {participants.map((item, index) => (
-          <li key={index}>{item.name}</li>
+        {participants.map((p, i) => (
+          <li key={i}>{p.name}</li>
         ))}
       </ul>
 
-      <h2>Всего участников: {participants.length}</h2>
+      <button onClick={clearParticipants}>Очистить участников</button>
 
-      <button onClick={pickWinner}>Выбрать победителя</button>
+      <Roulette participants={participants} onPickWinner={handleWinner} />
 
       {winner && (
         <div>
           <h2>Победитель: {winner.name}</h2>
-          <p>Дата: {winner.date}</p>
+          <p>{winner.date}</p>
         </div>
       )}
 
-      <h2>История розыгрышей:</h2>
-
-      <button onClick={clearHistory}>Очистить историю</button>
-
+      <h3>История:</h3>
       <ul>
-        {history.map((item, index) => (
-          <li key={index}>
-            {item.name} — {item.date}
+        {history.map((h, i) => (
+          <li key={i}>
+            {h.name} — {h.date}
           </li>
         ))}
       </ul>
+
+      <button onClick={clearHistory}>Очистить историю</button>
     </div>
   );
 }
