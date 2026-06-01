@@ -6,7 +6,7 @@
 
 Сайт на хсотенге гитхаба -> https://axsiontm.github.io/prize-draw-app/
 
-
+[Скачать презентацию](https://drive.google.com/file/d/14xcBBgaQpnjpW0g8KIR7OhS466eqfHjX/view?usp=sharing)
 
 ---
 
